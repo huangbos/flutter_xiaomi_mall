@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/home_controller.dart';
+import '../controllers/shopcart_controller.dart';
 
-class HomeView extends GetView<HomeController> {
-  const HomeView({Key? key}) : super(key: key);
+class ShopcartView extends GetView<ShopcartController> {
+  const ShopcartView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('HomeView'),
+        title: const Text('ShopcartView'),
         centerTitle: true,
       ),
       body: const Center(
         child: Text(
-          'HomeView',
+          'ShopcartView is working',
           style: TextStyle(fontSize: 20),
         ),
       ),

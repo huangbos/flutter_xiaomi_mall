@@ -1,0 +1,3 @@
+var enUs = {
+  'hello': 'hello',
+};

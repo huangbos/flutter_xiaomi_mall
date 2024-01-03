@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_xiaomi_mall/app/models/categoryLeftModel.dart';
-import 'package:flutter_xiaomi_mall/app/models/categoryModel.dart';
 import 'package:flutter_xiaomi_mall/app/models/categoryRightModel.dart';
 import 'package:get/get.dart';
 

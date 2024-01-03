@@ -13,12 +13,24 @@ class MineView extends GetView<MineController> {
         title: const Text('MineView'),
         centerTitle: true,
       ),
-      body: const Center(
-        child: Text(
-          'MineView is working',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
+      body: Center(
+          child: Column(
+        children: [
+          Text("我是多语言=====${"hello".tr}"),
+          ElevatedButton(
+              onPressed: () {
+                var locale = Locale('en', 'US');
+                Get.updateLocale(locale);
+              },
+              child: Text("更新多语言为英语")),
+          ElevatedButton(
+              onPressed: () {
+                var locale = Locale('zh', 'CN');
+                Get.updateLocale(locale);
+              },
+              child: Text("更新多语言为中文"))
+        ],
+      )),
     );
   }
 }

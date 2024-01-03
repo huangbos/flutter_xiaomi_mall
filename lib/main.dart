@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_xiaomi_mall/app/translations/translations.dart';
 
 import 'package:get/get.dart';
 
@@ -8,7 +9,8 @@ import 'app/routes/app_pages.dart';
 
 void main() {
   //flutter 修改状态栏的颜色
-  SystemUiOverlayStyle systemUiOverlayStyle = const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+  SystemUiOverlayStyle systemUiOverlayStyle =
+      const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
 
   runApp(ScreenUtilInit(
@@ -18,10 +20,14 @@ void main() {
       // Use builder only if you need to use library outside ScreenUtilInit context
       builder: (_, child) {
         return GetMaterialApp(
-          debugShowCheckedModeBanner: false,//去除debug
+          debugShowCheckedModeBanner: false, //去除debug
           title: "Application",
           initialRoute: AppPages.INITIAL,
           getPages: AppPages.routes,
+
+          translations: Translation(), // 你的翻译
+          locale: Locale('zh', 'CN'), // 将会按照此处指定的语言翻译
+          fallbackLocale: Locale('en', 'US'), // 添加一个回调语言选项，以备上面指定的语言翻译不存在
         );
       }));
 }

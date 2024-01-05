@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_xiaomi_mall/app/routes/app_pages.dart';
 import 'package:flutter_xiaomi_mall/app/services/screenAdapter.dart';
 
 import 'package:get/get.dart';
@@ -61,7 +62,9 @@ class CategoryView extends GetView<CategoryController> {
               var pic = "https://xiaomi.itying.com/${categoryRightItem.pic}"
                   .replaceAll("\\", "/");
               print("pic=====$pic");
-              return Column(
+              return InkWell(
+                onTap: () => Get.toNamed(Routes.PRUDUCT_LIST,arguments: {"cid":categoryRightItem.id}),
+                child: Column(
                 children: [
                   Image.network(
                     pic,
@@ -72,6 +75,7 @@ class CategoryView extends GetView<CategoryController> {
                   ),
                   Text("${categoryRightItem.title}"),
                 ],
+              ),
               );
             }))));
   }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -26,6 +28,9 @@ class MineView extends GetView<MineController> {
           ElevatedButton(
               onPressed: () {
                 var locale = Locale('zh', 'CN');
+
+                print("${locale.languageCode}-${locale.countryCode}");
+
                 Get.updateLocale(locale);
               },
               child: Text("更新多语言为中文"))

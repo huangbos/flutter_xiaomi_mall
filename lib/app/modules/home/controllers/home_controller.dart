@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
@@ -23,7 +24,6 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
     scrollController.addListener(() {
       var scrollY = scrollController.position.pixels;
 
@@ -43,6 +43,7 @@ class HomeController extends GetxController {
     getCategoryData();
     getGoodsData();
   }
+
 
 //获取banner数据
   getBannerData() async {

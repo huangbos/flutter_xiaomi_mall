@@ -1,0 +1,7 @@
+
+class Aa {
+    String name = "";
+}
+
+
+

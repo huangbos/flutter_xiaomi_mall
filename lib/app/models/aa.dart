@@ -1,7 +1,0 @@
-
-class Aa {
-    String name = "";
-}
-
-
-

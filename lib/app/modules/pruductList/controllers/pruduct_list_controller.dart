@@ -3,7 +3,9 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_xiaomi_mall/app/http/baseResponse.dart';
 import 'package:flutter_xiaomi_mall/app/models/productListModel.dart';
+import 'package:flutter_xiaomi_mall/app/http/http.dart';
 import 'package:get/get.dart';
 
 class PruductListController extends GetxController {
@@ -38,45 +40,58 @@ class PruductListController extends GetxController {
       print("page====${page}");
       final cid = Get.arguments["cid"];
       print("cid=====$cid");
-      final response = await Dio().get(
-          "https://xiaomi.itying.com/api/plist?cid=${cid}&${page}=1&pageSize=${pageSize}");
+      // final response = await Dio().get(
+      //     "https://xiaomi.itying.com/api/plist?cid=${cid}&${page}=1&pageSize=${pageSize}");
 
+      // print("response===$response");
 
-      print("response===$response");
+    
+    var params = {
+        "cid":cid,
+        "page":page,
+        "pageSize":pageSize
+    };
 
-      final productListModel = ProductListModel.fromJson(response.data);
+     final response  = await  HttpUtil.instance.get<List<ProductListItemModel>>("api/plist",data:params,options: Options(
+        headers: {
+          "version":"1"
+        }
+     ) );
 
-      final tempList = productListModel.result!;
+  print(response.data?.length);
 
-      if(isRefresh){
-        productList.clear();
-      }
+      // final productListModel = ProductListModel.fromJson(response.data);
 
-      productList.addAll(tempList);
+      // final tempList = productListModel.result!;
 
-      page++;
+      // if (isRefresh) {
+      //   productList.clear();
+      // }
 
-      flag = true;
+      // productList.addAll(tempList);
 
-      if (tempList.length < pageSize) {
-        hasData.value = false;
-      }
+      // page++;
 
-   
+      // flag = true;
+
+      // if (tempList.length < pageSize) {
+      //   hasData.value = false;
+      // }
     }
   }
 
- Future onRefresh() async {
-    isRefresh = true ;
+  Future onRefresh() async {
+    isRefresh = true;
     page = 1;
     getProductList();
-
- 
   }
 
   @override
   void onReady() {
     super.onReady();
 
+
   }
+
 }
+

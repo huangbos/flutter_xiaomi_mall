@@ -47,63 +47,84 @@ class HttpUtil {
 
   //get请求方法
 
-Future<BaseEntity<T>>  get<T>(url, {data, options, cancelToken}) async {
+  Future<BaseEntity<T>> _get<T>(url, {data, options, cancelToken}) async {
     Response response;
     try {
       response = await _dio.get(url,
           queryParameters: data, options: options, cancelToken: cancelToken);
 
-      print("response====$response");
-
-      if (response.data is Map) {
-        print("response====Map");
-      }
-
-      if (response.data is String) {
-        print("response====String");
-      }
-
-      // 解析 JSON 数据为 Dart 对象
-      // BaseEntity<T> baseEntity = BaseEntity<T>.fromJson(response.data);
-
-       return BaseEntity<T>.fromMap(response.data);
-
-
-      // return baseEntity;
+      return BaseEntity<T>.fromMap(response.data);
     } on DioException catch (e) {
       // handleHttpError(e);
       HttpExceptions.handleHttpError(e);
-      return BaseEntity(data: null, errorCode: 0, errorMsg: "");
+      return BaseEntity(data: null, code: 0, message: "");
     }
   }
 
   //post请求方法
 
-  // Future<BaseResponse> _post(url, {data, options, cancelToken}) async {
-  //   Response response;
-  //   try {
-  //     response = await _dio.post(url, data: data, options: options, cancelToken: cancelToken);
+  Future<BaseEntity<T>> _post<T>(url, {data, options, cancelToken}) async {
+    Response response;
+    try {
+      response = await _dio.post(url,
+          data: data, options: options, cancelToken: cancelToken);
 
-  //     return json.decode(response.data);
-  //   } on DioException catch (e) {
-  //     // handleHttpError(e);
-  //     HttpExceptions.handleHttpError(e);
-  //     return BaseResponse();
-  //   }
-  // }
+      return BaseEntity<T>.fromMap(response.data);
+    } on DioException catch (e) {
+      // handleHttpError(e);
+      HttpExceptions.handleHttpError(e);
+      return BaseEntity(data: null, code: 0, message: "");
+    }
+  }
 
-  // Future<Response> request(url, {method = HttpUtil.GET,data, options, cancelToken}) async {
-  //   debugPrint("请求开始");
-  //   Response response;
+  Future<BaseEntity<T>> request<T>(url,
+      {method = HttpUtil.GET, data, options, cancelToken}) async {
+    debugPrint("请求开始");
+    BaseEntity<T> response;
 
-  //   if (method == HttpUtil.GET) {
-  //      response =  await _get(url,data: data,options: options,cancelToken: cancelToken);
-  //   }
+    if (method == HttpUtil.GET) {
+      response = await _get(url,
+          data: data, options: options, cancelToken: cancelToken);
+    } else {
+      response = await _post(url,
+          data: data, options: options, cancelToken: cancelToken);
+    }
 
-  //   else{
-  //      response = await _post(url,data: data,options: options,cancelToken: cancelToken);
-  //   }
+    return response;
+  }
 
-  //   return response;
-  // }
+  get2<T>(String url,
+      {Map<String, dynamic>? data,
+      Options? options,
+      CancelToken? cancelToken,
+      required Function(BaseEntity result) onSuccess,
+      required Function(int code, String message) onError}) async {
+    Response response;
+    try {
+      response = await _dio.get(url,
+          queryParameters: data, options: options, cancelToken: cancelToken);
+
+      BaseEntity baseEntity = BaseEntity.fromMap(response.data);
+
+      switch (baseEntity.code) {
+        case 0: //成功
+
+          onSuccess(baseEntity);
+          break;
+        case 401: //没有token
+          onError(401, "没有token");
+          break;
+        case 405: //被挤掉了
+          onError(405, "被挤掉了");
+          break;
+        default:
+          onError(500, "服务异常");
+          break;
+      }
+    } on DioException catch (e) {
+      // handleHttpError(e);
+      HttpExceptions.handleHttpError(e);
+      onError(500, "服务异常");
+    }
+  }
 }

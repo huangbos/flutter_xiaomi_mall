@@ -3,6 +3,7 @@ import 'package:flutter_xiaomi_mall/app/services/screenAdapter.dart';
 import 'package:flutter_xiaomi_mall/app/widget/appBar.dart';
 
 import 'package:get/get.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '../controllers/pruduct_list_controller.dart';
 
@@ -75,7 +76,7 @@ class PruductListView extends GetView<PruductListController> {
 
   //自定义组件
   Widget progressIndicator() {
-    if (controller.hasData.value) {
+    // if (controller.hasData.value) {
       return Center(
         child: Container(
           padding: EdgeInsets.all(20),
@@ -84,11 +85,12 @@ class PruductListView extends GetView<PruductListController> {
           ),
         ),
       );
-    } else {
-      return const Center(
-        child: Text("没有数据了哦，我是有底线的"),
-      );
-    }
+    // }
+    //  else {
+    //   return const Center(
+    //     child: Text("没有数据了哦，我是有底线的"),
+    //   );
+    // }
   }
 
   //商品列表
@@ -98,77 +100,83 @@ class PruductListView extends GetView<PruductListController> {
       margin: EdgeInsets.only(top: ScreenAdapter.heigth(150)),
       padding: EdgeInsets.all(ScreenAdapter.width(20)),
       child: Obx(() => controller.productList.isNotEmpty
-          ? ListView.builder(
-              controller: controller.scrollController,
-              itemCount: controller.productList.length,
-              itemBuilder: (context, index) {
-                var productItem = controller.productList[index];
-                var pic = "https://xiaomi.itying.com/${productItem.pic}"
-                    .replaceAll("\\", "/");
-                return Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.fromLTRB(
-                          0, 0, 0, ScreenAdapter.heigth(20)),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius:
-                              BorderRadius.circular(ScreenAdapter.heigth(20))),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(ScreenAdapter.width(60)),
-                            width: ScreenAdapter.width(400),
-                            height: ScreenAdapter.heigth(460),
-                            child: Image.network(pic, fit: BoxFit.fitHeight),
-                          ),
-                          Expanded(
-                              child: Container(
-                            padding: EdgeInsets.fromLTRB(
-                                ScreenAdapter.width(20),
-                                ScreenAdapter.width(30),
-                                ScreenAdapter.width(20),
-                                ScreenAdapter.width(30)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${productItem.title}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: ScreenAdapter.fontSize(40)),
-                                ),
-                                SizedBox(
-                                  height: ScreenAdapter.heigth(20),
-                                ),
-                                Text(
-                                  "${productItem.subTitle}",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: ScreenAdapter.fontSize(30)),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(
-                                  height: ScreenAdapter.heigth(20),
-                                ),
-                                Text(
-                                  "价格¥${productItem.price}元",
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ],
+          ? SmartRefresher(
+              controller: controller.refreshController,
+              onRefresh: controller.onRefresh,
+              onLoading: controller.onLoadMore,
+              enablePullUp: true,
+              child: ListView.builder(
+                // controller: controller.scrollController,
+                itemCount: controller.productList.length,
+                itemBuilder: (context, index) {
+                  var productItem = controller.productList[index];
+                  var pic = "https://xiaomi.itying.com/${productItem.pic}"
+                      .replaceAll("\\", "/");
+                  return Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(
+                            0, 0, 0, ScreenAdapter.heigth(20)),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(
+                                ScreenAdapter.heigth(20))),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(ScreenAdapter.width(60)),
+                              width: ScreenAdapter.width(400),
+                              height: ScreenAdapter.heigth(460),
+                              child: Image.network(pic, fit: BoxFit.fitHeight),
                             ),
-                          ))
-                        ],
+                            Expanded(
+                                child: Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  ScreenAdapter.width(20),
+                                  ScreenAdapter.width(30),
+                                  ScreenAdapter.width(20),
+                                  ScreenAdapter.width(30)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${productItem.title}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenAdapter.fontSize(40)),
+                                  ),
+                                  SizedBox(
+                                    height: ScreenAdapter.heigth(20),
+                                  ),
+                                  Text(
+                                    "${productItem.subTitle}",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: ScreenAdapter.fontSize(30)),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  SizedBox(
+                                    height: ScreenAdapter.heigth(20),
+                                  ),
+                                  Text(
+                                    "价格¥${productItem.price}元",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ],
+                              ),
+                            ))
+                          ],
+                        ),
                       ),
-                    ),
-                    (controller.productList.length - 1 == index)
-                        ? progressIndicator()
-                        : const Text("")
-                  ],
-                );
-              },
+                      // (controller.productList.length - 1 == index)
+                      //     ? progressIndicator()
+                      //     : const Text("")
+                    ],
+                  );
+                },
+              ),
             )
           : progressIndicator()),
     );
@@ -192,10 +200,11 @@ class PruductListView extends GetView<PruductListController> {
       body: Stack(
         children: [
           condition(),
-          RefreshIndicator(
-            child: productList(),
-            onRefresh: () => controller.onRefresh(),
-          )
+          // RefreshIndicator(
+          //   child: productList(),
+          //   onRefresh: () => controller.onRefresh(),
+          // )
+          productList()
         ],
       ),
     );

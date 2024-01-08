@@ -11,7 +11,6 @@ class BaseEntity<T> {
 
   // map类型数据
   factory BaseEntity.fromMap(Map<String, dynamic> body) {
-    print("======${json.encode(body)}");
     return BaseEntity<T>(
       code: 0,
       message: "message",

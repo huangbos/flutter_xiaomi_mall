@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_xiaomi_mall/app/modules/mine/controllers/mine_controller.dart';
 
 import 'package:get/get.dart';
 
@@ -19,6 +20,10 @@ class TabsView extends GetView<TabsController> {
             onTap: (index) {
               controller.currentIndex.value = index;
               controller.pageController.jumpToPage(index);
+              //我的界面每次进入都要刷新数据
+              if (index == 4) {
+                Get.find<MineController>().onResumed();
+              }
             },
             type: BottomNavigationBarType.fixed, //超过4个item需要设置
             selectedItemColor: Colors.blue,

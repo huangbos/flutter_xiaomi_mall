@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_xiaomi_mall/app/services/pageAliveWrapper.dart';
 
 import 'package:get/get.dart';
 
 import '../controllers/mine_controller.dart';
 
-class MineView extends GetView<MineController> {
+class MineView extends GetView<MineController>{
   const MineView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -33,9 +34,16 @@ class MineView extends GetView<MineController> {
 
                 Get.updateLocale(locale);
               },
-              child: Text("更新多语言为中文"))
+              child: Text("更新多语言为中文"),
+            
+              ),
+              Obx(() =>Container(
+                child: Text("${controller.count}"),
+              ))
         ],
       )),
     );
   }
+
+ 
 }

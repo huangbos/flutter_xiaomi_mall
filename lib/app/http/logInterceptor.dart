@@ -32,7 +32,7 @@ class HttpLogInterceptor extends  QueuedInterceptorsWrapper {
     debugPrint(
         "===========================响应请求===================================");
 
-    debugPrint("响应数据====${json.encode(response.data)}");
+    debugPrint("响应数据:${response.realUri}====${json.encode(response.data)}");
     debugPrint("响应状态码====${response.statusCode}");
     debugPrint("响应状态信息====${response.statusMessage}");
 

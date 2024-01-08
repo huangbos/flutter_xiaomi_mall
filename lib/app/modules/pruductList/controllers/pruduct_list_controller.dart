@@ -3,10 +3,13 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_xiaomi_mall/app/global/controllers/global_controller.dart';
 import 'package:flutter_xiaomi_mall/app/http/baseResponse.dart';
 import 'package:flutter_xiaomi_mall/app/http/httpCallback.dart';
 import 'package:flutter_xiaomi_mall/app/models/productListModel.dart';
 import 'package:flutter_xiaomi_mall/app/http/http.dart';
+import 'package:flutter_xiaomi_mall/app/modules/mine/controllers/mine_controller.dart';
+import 'package:flutter_xiaomi_mall/app/utils/spUtil.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -41,50 +44,50 @@ class PruductListController extends GetxController {
 
   getProductList() async {
     //  flag = false;
-      print("page====${page}");
-      final cid = Get.arguments["cid"];
-      print("cid=====$cid");
-      // final response = await Dio().get(
-      //     "https://xiaomi.itying.com/api/plist?cid=${cid}&${page}=1&pageSize=${pageSize}");
+    print("page====${page}");
+    final cid = Get.arguments["cid"];
+    print("cid=====$cid");
+    // final response = await Dio().get(
+    //     "https://xiaomi.itying.com/api/plist?cid=${cid}&${page}=1&pageSize=${pageSize}");
 
-      // print("response===$response");
+    // print("response===$response");
 
-      var params = {"cid": cid, "page": page, "pageSize": pageSize};
+    var params = {"cid": cid, "page": page, "pageSize": pageSize};
 
-      // final response = await HttpUtil.instance.request<ProductListItemModel>(
-      //     "api/plist",
-      //     data: params,
-      //     options: Options(headers: {"version": "1"}));
+    // final response = await HttpUtil.instance.request<ProductListItemModel>(
+    //     "api/plist",
+    //     data: params,
+    //     options: Options(headers: {"version": "1"}));
 
-      HttpUtil.instance.get2<ProductListItemModel>(
-        "api/plist",
-        data: params,
-        onSuccess: (result) {
-          // flag = true;
-          page++;
-          refreshController.refreshCompleted();
+    HttpUtil.instance.get2<ProductListItemModel>(
+      "api/plist",
+      data: params,
+      onSuccess: (result) {
+        // flag = true;
+        page++;
+        refreshController.refreshCompleted();
 
-          if (isRefresh) {
-            //刷新
-            productList.clear();
-          }
-          var productListItemModelList = result.data;
-          productListItemModelList?.forEach((item) {
-            var bb = ProductListItemModel.fromJson(item);
-            productList.add(bb);
-          });
-          //没有更多数据了
-          if (productListItemModelList!.length < pageSize) {
-            // hasData.value = false;
-            refreshController.loadNoData();
-          } else {
-            refreshController.loadComplete();
-          }
-        },
-        onError: (code, message) {
-          print("接口报错了=====$message");
-        },
-      );
+        if (isRefresh) {
+          //刷新
+          productList.clear();
+        }
+        var productListItemModelList = result.data;
+        productListItemModelList?.forEach((item) {
+          var bb = ProductListItemModel.fromJson(item);
+          productList.add(bb);
+        });
+        //没有更多数据了
+        if (productListItemModelList!.length < pageSize) {
+          // hasData.value = false;
+          refreshController.loadNoData();
+        } else {
+          refreshController.loadComplete();
+        }
+      },
+      onError: (code, message) {
+        print("接口报错了=====$message");
+      },
+    );
   }
 
   onRefresh() {
@@ -101,5 +104,10 @@ class PruductListController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    // final GlobalController c = Get.put(GlobalController());
+    // c.count.value = 10;
+    // final c2 = Get.find<GlobalController>();
+    // print("${c2.count}");
+
   }
 }

@@ -15,6 +15,7 @@ void main() {
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
 
+
   runApp(ScreenUtilInit(
       designSize: const Size(1080, 2400), //设计稿尺寸
       minTextAdapt: true,
